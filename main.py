@@ -79,10 +79,10 @@ def run_inference(rows):
     model = ml_models["classifier"]
     return model.predict(scaled), model.predict_proba(scaled)
 
+
 @app.get("/health")
 def health():
-    return {"status": "ok", "model_loaded": "classifier" in ml_models}
-
+    return {"status": "ok", "model_loaded": ml_models.get("classifier") is not None}
 
 @app.get("/model/info")
 def model_info():
