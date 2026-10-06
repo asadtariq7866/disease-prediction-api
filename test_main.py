@@ -36,8 +36,13 @@ def setup_module():
 def test_health():
     r = client.get("/health")
     assert r.status_code == 200
-    assert r.json() == {"status": "ok"}
+    assert r.json() == {"status": "ok", "model_loaded": True}
 
+def test_health_model_not_loaded():
+    ml_models["classifier"] = None
+    r = client.get("/health")
+    assert r.json() == {"status": "ok", "model_loaded": False}
+    ml_models["classifier"] = FakeModel()
 
 def test_predict_valid():
     r = client.post("/predict", json=VALID)
